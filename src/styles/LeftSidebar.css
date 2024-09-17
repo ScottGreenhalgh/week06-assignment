@@ -1,0 +1,46 @@
+.left-sidebar {
+  grid-column: 1 / 2;
+  background-image: linear-gradient(
+    to right,
+    blue,
+    lightblue,
+    blue,
+    lightblue,
+    blue,
+    lightblue,
+    blue,
+    lightblue
+  );
+  border-right: saddlebrown ridge 10px;
+}
+
+.left-sidebar.ldark {
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119)
+  );
+  border-right: rgb(87, 44, 13) ridge 10px;
+}
+
+#cookie-image {
+  display: block;
+  width: 75%;
+  margin: 30% auto 0 auto;
+  transition: width 0.1s ease;
+}
+
+.left-sidebar-text {
+  background-color: #000000b4;
+  color: white;
+  text-align: center;
+  margin: 1% 5% 0 5%;
+  padding: 2% 0 2% 0;
+  border-radius: 8px;
+}

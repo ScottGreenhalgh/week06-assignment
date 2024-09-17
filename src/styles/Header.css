@@ -1,0 +1,20 @@
+.header {
+  grid-column: 1 / span 3;
+  background-color: darkslategrey;
+  color: white;
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: saddlebrown ridge 5px;
+}
+
+.header.hdark {
+  background-color: rgb(27, 46, 46);
+  border-bottom: rgb(87, 44, 13) ridge 5px;
+}
+
+#button-theme-toggle {
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  background-color: yellow;
+}

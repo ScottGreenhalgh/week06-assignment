@@ -1,0 +1,59 @@
+.main {
+  grid-column: 2 / 3;
+  background-image: linear-gradient(
+    to right,
+    blue,
+    lightblue,
+    blue,
+    lightblue,
+    blue,
+    lightblue,
+    blue,
+    lightblue,
+    blue,
+    lightblue,
+    blue,
+    lightblue
+  );
+}
+
+.main.mdark {
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119),
+    rgb(0, 0, 100),
+    rgb(56, 103, 119)
+  );
+}
+
+.information {
+  background-color: #000000b4;
+  color: white;
+  margin: 1% 5% 0 5%;
+  padding: 2% 2% 2% 2%;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+#save-button {
+  padding: 0.5rem 2rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  background-color: yellow;
+  margin-top: 10px;
+}
+
+.active-upgrade {
+  margin-top: 1rem;
+}
