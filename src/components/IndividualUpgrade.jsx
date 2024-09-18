@@ -1,8 +1,5 @@
 import "../styles/IndividualUpgrades.css";
-
-function numberWithCommas(number) {
-  return new Intl.NumberFormat().format(number);
-}
+import formatter from "../utils/formatter";
 
 export default function IndividualUpgrade({ upgrade }) {
   return (
@@ -12,11 +9,9 @@ export default function IndividualUpgrade({ upgrade }) {
       aria-label={`${upgrade.name} upgrade`}
     >
       <p id={`name-${upgrade.id}`}>{upgrade.name}</p>
-      <p id={`cost-${upgrade.id}`}>
-        {`Cost: ${numberWithCommas(upgrade.cost)}`}
-      </p>
+      <p id={`cost-${upgrade.id}`}>{`Cost: ${formatter(upgrade.cost)}`}</p>
       <p id={`increase-${upgrade.id}`}>
-        {`CPS: ${numberWithCommas(upgrade.increase)}`}
+        {`CPS: ${formatter(upgrade.increase)}`}
       </p>
     </div>
   );

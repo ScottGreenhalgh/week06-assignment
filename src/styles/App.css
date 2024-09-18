@@ -27,6 +27,7 @@
 
 .cookie-button {
   padding: 0.5rem 2rem;
+  margin-left: 0.5rem;
   border-radius: 0.25rem;
   border: none;
   cursor: pointer;
@@ -37,4 +38,12 @@
 #button-theme-toggle:hover,
 #save-button:hover {
   background-color: gold;
+}
+
+/* --------- Media -------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }

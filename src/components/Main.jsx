@@ -1,4 +1,6 @@
 import "../styles/Main.css";
+import CookieNotice from "./CookieNotice";
+import CurrentUpgrades from "./CurrentUpgrades";
 
 export default function Main() {
   return (
@@ -24,28 +26,8 @@ export default function Main() {
         </button>
       </div>
 
-      <div id="current-upgrades" className="information">
-        <h3>Current Upgrades</h3>
-        <p>Note: CPS is Cookies (baked) Per Second.</p>
-      </div>
-
-      <div id="cookie-notice" className="cookie-notice">
-        <p>Do you accept cookies?</p>
-        <button
-          id="button-accept"
-          className="cookie-button"
-          aria-label="accept tracking cookies button"
-        >
-          Yes
-        </button>
-        <button
-          id="button-decline"
-          className="cookie-button"
-          aria-label="decline tracking cookies button"
-        >
-          No
-        </button>
-      </div>
+      <CurrentUpgrades />
+      <CookieNotice />
     </main>
   );
 }
