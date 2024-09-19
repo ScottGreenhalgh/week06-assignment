@@ -1,17 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import "../styles/LeftSidebar.css";
 import formatter from "../utils/formatter";
+import { AppContext } from "../context/AppProvider";
 
-export default function LeftSidebar({ count, setCount, cps }) {
+export default function LeftSidebar() {
+  let { count, setCount, cps } = useContext(AppContext);
+
   function handleClick() {
     setCount(count + 1);
   }
 
   useEffect(() => {
-    console.log("useEffect running");
+    //console.log("useEffect running");
     const myInterval = setInterval(() => {
-      console.log("This is running interval");
-      setCount((cookies) => cookies + 1 * cps);
+      //console.log("This is running interval");
+      setCount((count) => count + 1 * cps);
     }, 1000);
 
     return () => {

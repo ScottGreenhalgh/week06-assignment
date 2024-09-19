@@ -1,6 +1,7 @@
 import "../styles/Main.css";
 import CookieNotice from "./CookieNotice";
 import CurrentUpgrades from "./CurrentUpgrades";
+import Save from "./Save";
 
 export default function Main() {
   return (
@@ -21,9 +22,7 @@ export default function Main() {
           automatically every 60 seconds, however you can manually save anytime
           by clicking the button below.
         </p>
-        <button id="save-button" aria-label="save button">
-          Save
-        </button>
+        <Save />
       </div>
 
       <CurrentUpgrades />
