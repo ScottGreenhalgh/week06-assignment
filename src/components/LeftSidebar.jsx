@@ -1,26 +1,46 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import "../styles/LeftSidebar.css";
 import formatter from "../utils/formatter";
 import { AppContext } from "../context/AppProvider";
+import { upgradeAmounts } from "../utils/activeUpgrades";
+import fetchUpgrades from "../utils/api";
 
 export default function LeftSidebar() {
-  let { count, setCount, cps } = useContext(AppContext);
+  let { count, setCount, cps, setCps } = useContext(AppContext);
+  const [upgrades, setUpgrades] = useState([]);
+  const [upgradesFetched, setUpgradesFetched] = useState(false);
+
+  useEffect(() => {
+    async function getUpgrades() {
+      if (!upgradesFetched) {
+        const data = await fetchUpgrades();
+        setUpgrades(data);
+        setUpgradesFetched(true);
+      }
+    }
+    getUpgrades();
+  }, [upgradesFetched]);
 
   function handleClick() {
     setCount(count + 1);
   }
 
   useEffect(() => {
-    //console.log("useEffect running");
     const myInterval = setInterval(() => {
-      //console.log("This is running interval");
-      setCount((count) => count + 1 * cps);
+      let newCps = 0;
+      for (let i = 0; i < upgradeAmounts.length; i++) {
+        if (upgrades[i]) {
+          newCps += upgradeAmounts[i] * upgrades[i].increase;
+        }
+      }
+      setCps(newCps);
+      setCount((prevCount) => prevCount + newCps);
     }, 1000);
 
     return () => {
       clearInterval(myInterval);
     };
-  }, [cps, setCount]);
+  }, [upgrades, setCps, setCount]);
 
   return (
     <div id="left-sidebar" className="left-sidebar">

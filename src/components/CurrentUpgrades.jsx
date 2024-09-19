@@ -4,14 +4,18 @@ import CurrentUpgradesInfo from "./CurrentUpgradesInfo";
 
 export default function CurrentUpgrades() {
   const [upgrades, setUpgrades] = useState([]);
+  const [upgradesFetched, setUpgradesFetched] = useState(false);
 
   useEffect(() => {
     async function getUpgrades() {
-      const data = await fetchUpgrades();
-      setUpgrades(data);
+      if (!upgradesFetched) {
+        const data = await fetchUpgrades();
+        setUpgrades(data);
+        setUpgradesFetched(true);
+      }
     }
     getUpgrades();
-  }, []);
+  }, [upgradesFetched]);
 
   return (
     <div id="current-upgrades" className="information">

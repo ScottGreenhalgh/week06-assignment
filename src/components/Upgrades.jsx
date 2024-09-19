@@ -8,14 +8,18 @@ import { upgradeAmounts } from "../utils/activeUpgrades";
 export default function Upgrades() {
   let { count, setCount } = useContext(AppContext);
   const [upgrades, setUpgrades] = useState([]);
+  const [upgradesFetched, setUpgradesFetched] = useState(false);
 
   useEffect(() => {
     async function getUpgrades() {
-      const data = await fetchUpgrades();
-      setUpgrades(data);
+      if (!upgradesFetched) {
+        const data = await fetchUpgrades();
+        setUpgrades(data);
+        setUpgradesFetched(true);
+      }
     }
     getUpgrades();
-  }, []);
+  }, [upgradesFetched]);
 
   function clickedUpgrade(id) {
     const clickedUpgrade = upgrades.find((upgrade) => upgrade.id === id);
