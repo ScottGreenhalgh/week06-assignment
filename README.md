@@ -1,6 +1,6 @@
 # Budget Bakery
 
-### Reflection
+## Reflection
 
 For this project I wanted to recreate one of my previous projects as closely as possible using react. https://github.com/ScottGreenhalgh/week03-assignment. Retaining all the existing features.
 
@@ -97,7 +97,61 @@ After completing yet another api import to complete basic functionality of the g
 
 ### Bugs and Issues
 
-One issue I encountered that left me a little confused for a while was that onClick cannot be applied directly to component children, for example, when I did the following under Upgrades.jsx:
+#### Quality of life elements
+
+With the app functioning as intended, I moved my attention to animations, audio and button highlighting. Previously this involved manipulating the dom directly and assigning alternative classes on the fly. This is something that is advised against in react and can cause problems. Instead I opted to make any changes to the className conditionally. Initially for the button highlighting, my approach was as follows:
+
+```jsx
+const buttonHighlighs = useCallback(() => {
+  for (let i = 0; upgrade.length > i; i++)
+    if (upgrade[i].cost > count) {
+      upgrade[i].classList.remove("upgrade-buttons");
+      upgrade[i].classList.add("upgrade-buttons-nocost");
+    } else {
+      upgrade[i].classList.add("upgrade-buttons");
+      upgrade[i].classList.remove("upgrade-buttons-nocost");
+      console.log(`${upgrade[i].name} has become affordable.`);
+    }
+}, [count, upgrade]);
+
+useEffect(() => {
+  buttonHighlighs();
+}, [count, buttonHighlighs]);
+```
+
+From here I attempted to just return className and apply it by calling buttonHighlights on the element by using the following:
+
+```jsx
+const buttonHighlighs = useCallback(() => {
+  for (let i = 0; upgrade.length > i; i++)
+    if (upgrade[i].cost > count) {
+      return "upgrade-buttons-nocost";
+    } else {
+      console.log(`${upgrade[i].name} has become affordable.`);
+      return "upgrade-buttons";
+    }
+}, [count, upgrade]);
+
+  useEffect(() => {
+    buttonHighlighs();
+  }, [count, buttonHighlighs]);
+
+  return (
+    <div
+      id={upgrade.id}
+      className={buttonHighlighs()}
+      aria-label={`${upgrade.name} upgrade`}
+      onClick={onClick}
+    >
+  )
+
+```
+
+This however didn't seem to load a className at all so I completely redesigned what I was doing. Initially using a useEffect to updated the page in combination with the useCallback, similar to my execution of the save function, this approach didn't seem to yeild the same results when toggling classNames. Seeing this didn't work as I expected I did some research into why. Turns out that useEffect doesn't handle re-rendering at all which was a huge misconception on my part up to this point. So moving forward I remove the useEffect and tried to see if applying the classNames directly to the element would solve the problem. Retaining the useCallback to avoid re-creating the function on each render, it appears to operate as intended following this model.
+
+#### Earlier issues
+
+Another issue I encountered prior to this, something that left me a little confused for a while was that onClick cannot be applied directly to component children, for example, when I did the following under Upgrades.jsx:
 
 ```jsx
 <div id="upgrades-container">
@@ -114,3 +168,57 @@ One issue I encountered that left me a little confused for a while was that onCl
 This left me scratching my head for a while trying to figure out why it wasn't working, but then I realised I needed to pass the onClick as a prop to IndividualUpgrade and apply it to the div of the element I wanted to create the click event listener on.
 
 By far the biggest issue I ran into was when I was rendering the CurrentUpgradesInfo.jsx onto the screen. When gathering everything I needed to have on screen at any given time I was using `upgradeAmounts[upgrade.id - 1]` however when writing this out I instead wrote `[upgrade.id = 1]` which took me a good hour of trying to find the issue to notice. Because I fixed this value at 1 I was getting a warning in console that the key values of multiple elements were the same, when I inspected, each element had the id of 1. I had absolutely no idea how this could've possibly happened for the best part of an hour. I compared exactly what I did with the example covered during the workshops which did look slightly different at first, but I remedied any typos here relatively quickly, but this didn't resolve the problem. I then replaced the entirety of CurrentUpgradesInfo with IndividualUpgrades and noticed that this part rendered completely fine. This is when I knew the issue was either with my activeUpgrades.js, my props or the elements returned by CurrentUpgradesInfo. So I decided to delete everything in the CurrentUpgradesInfo and create it from scratch. While slowly rebuilding the returned HTML I noticed the typo, resolving the frustrating problem.
+
+### Key takeaways
+
+From this project I learned a lot about react and how it displays content on the page in a vastly different way to traditional javascript. The key points I learned were:
+
+- React re-renders components when the state or props of a component change. When that happens, React automatically calls the component's function to generate the new JSX, which is then reconciled with the previous DOM.
+
+- `useEffect` is mainly for side effects — things like interacting with the DOM or API calls. It doesn’t control rendering itself but runs after rendering, depending on the dependencies.
+
+- `useCallback` does not trigger a re-render either. It only remembers (memoises) the function, so that it doesn’t get re-created on every render unless its dependencies change.
+
+- `useState` Stores local component state. If state changes, the component re-renders.
+
+### Refactoring
+
+After learning a whole lot about the rendering pipeline, I decided to revise how I tackled earlier problems and revise exactly how I did it. It appears some of what I was doing was quite sub-optimal so I wanted to fix it before completing this project. To do this I researched a little deeper into something I came across earlier called `createContext`. I initially used this to handle my prop drilling problem and it appears I can do something similar here to solve this issue new problem. My api requests are completely out of hand right now, I want to cut that right down to as close to one as possible.
+
+In a new UpdatesProvider.jsx file, starting with `createContext` and returning a Provider. I then created three different `useState` arrays, each handling a different state the fetch request can fall into. The first is the loading state, this is the state in which the request falls under before the promise has been fulfilled. Once the response has been recieved the loading state is set to false. If the request fails the error state will catch the error and take this state value becomes the error. When calling this function later I can handle the different instances of the response seperately by returning different html elements based on which state is truthy and which is falsey. I then incourporated a couple new features I came across, the first being `useMemo`. From my understanding it operates very similarly to `useCallback` but instead of memoising a function, I'm memoising a variable, which is another way of saying it's remembered and won't rerun on the next render. The next new tool I used was `useRef`. This is a way of preventing the dev behaviour of StrictMode. Since I was attempting to minimise my fetch requests to the api, knocking this down to a single request here seemed like the optimal choice. I won't be heavy handidly using this feature since I value the ability to run functions twice most of the time for debugging reasons, but in this instance, I felt the fetch requests were handled quite nicely and therfore likely required minimal further work.
+
+When calling these functions I removed anywhere a fetch request happened to the api in all components that used them, and instead imported from UpgradesContext. I then defined which props I wanted with useContext. From here, that component has full access to all the values tied to those props. Now I just needed to handle my edge cases where I was either loading or an error was thrown. I made a simple if statement for each, checking if these values were either truthy or falsey and changed the html output based on the result. If both are falsey, the component will return the logic defined before this change was implemented.
+
+I did however run into an issue while building this structure. When calling the function getUpgrades inside UpgradesProvider.jsx I forgot my parenthesis, so the function was never being called, and I was perpetually stuck in the loading state. Took me another good long while to work out why this was happening. I even created a FetchTest.jsx with the original method of fetching inside to see if something was wrong with my fetch requests, which wasn't the case.
+
+## Achieved
+
+Requirements completed for this project are as follows:
+
+- Numerous useState hooks used. Components that use this are: LeftSidebar, Header, UpgradesProvider, AppProvider and CookieNotice.
+
+- Numerous useEffect hooks used. Components that use this are: CookieNotice, LeftSidebar, UpgradesProvider, Header and save.
+
+- JSX has been returned from multiple production components (14 in total).
+
+- setInterval used on two occasions. Once to increment auto save in the save component. Once to increment the page update to display a new updated count.
+
+- .map() used to render bulk elements, used on two components. Once under Upgrades, once under CurrentUpgrades.
+
+- Logic: The majority of calculation logic handled under the LeftSidebar and Upgrades components.
+
+Additional goals completed during the project are as follows:
+
+- Local storage used to retain information related to player progression. Handled under the save component.
+
+- The upgrades api (under utils/api.js) fetches the api and sends the data to three diffent components through the UpdatesProvider. These are the CurrentUpgrades, Upgrades and LeftSidebar.
+
+- Furthuring from the original design, accounting for feedback given during the week03 project, mobile styling has been integrated.
+
+- useCallback used on two occasions. Components that use this are: IndividualUpgrades and save.
+
+- useContext used on numerous occasions. Components that use this are: CurrentUpgrades, IndividualUpgrades, LeftSidebar, save and Upgrades.
+
+- createContext used on two occasions. Components that use this are AppProvider and UpdatesProvider.
+
+- useMemo and useRef both used on one occcasion. This was within the UpdatesProvider component.

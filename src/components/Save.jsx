@@ -24,7 +24,7 @@ export default function Save() {
     }
   }, [setCount]);
 
-  let callbackSave = useCallback(() => {
+  const callbackSave = useCallback(() => {
     console.log("Progress Saved");
     localStorage.setItem("cookies", count);
     localStorage.setItem("autoClicker", upgradeAmounts[0]);

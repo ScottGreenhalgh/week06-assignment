@@ -47,3 +47,13 @@
   font-weight: bold;
   font-size: 1rem;
 }
+
+@media (max-width: 767px) {
+  .right-sidebar {
+    grid-column: 1 / 2;
+    border-left: none;
+  }
+  .right-sidebar.rdark {
+    border-left: none;
+  }
+}

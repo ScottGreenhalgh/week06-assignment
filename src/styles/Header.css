@@ -18,3 +18,9 @@
   cursor: pointer;
   background-color: yellow;
 }
+
+@media (max-width: 768px) {
+  .header {
+    grid-column: 1 / 2;
+  }
+}

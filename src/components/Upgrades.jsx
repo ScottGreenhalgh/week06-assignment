@@ -1,25 +1,13 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import "../styles/Upgrades.css";
 import IndividualUpgrade from "./IndividualUpgrade";
-import fetchUpgrades from "../utils/api";
 import { AppContext } from "../context/AppProvider";
 import { upgradeAmounts } from "../utils/activeUpgrades";
+import { UpgradesContext } from "../context/UpdatesProvider";
 
 export default function Upgrades() {
   let { count, setCount } = useContext(AppContext);
-  const [upgrades, setUpgrades] = useState([]);
-  const [upgradesFetched, setUpgradesFetched] = useState(false);
-
-  useEffect(() => {
-    async function getUpgrades() {
-      if (!upgradesFetched) {
-        const data = await fetchUpgrades();
-        setUpgrades(data);
-        setUpgradesFetched(true);
-      }
-    }
-    getUpgrades();
-  }, [upgradesFetched]);
+  const { upgrades, loading, error } = useContext(UpgradesContext);
 
   function clickedUpgrade(id) {
     const clickedUpgrade = upgrades.find((upgrade) => upgrade.id === id);
@@ -38,6 +26,9 @@ export default function Upgrades() {
     upgradeAmounts[id - 1]++;
     console.log(upgradeAmounts);
   }
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div id="upgrades-container">

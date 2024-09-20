@@ -1,11 +1,19 @@
+import { useCallback, useContext } from "react";
 import "../styles/IndividualUpgrades.css";
 import formatter from "../utils/formatter";
+import { AppContext } from "../context/AppProvider";
 
 export default function IndividualUpgrade({ upgrade, onClick }) {
+  let { count } = useContext(AppContext);
+
+  const buttonHighlighs = useCallback(() => {
+    return upgrade.cost > count ? "upgrade-buttons-nocost" : "upgrade-buttons";
+  }, [count, upgrade]);
+
   return (
     <div
       id={upgrade.id}
-      className="upgrade-buttons"
+      className={buttonHighlighs()}
       aria-label={`${upgrade.name} upgrade`}
       onClick={onClick}
     >

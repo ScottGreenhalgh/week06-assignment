@@ -4,16 +4,19 @@ import LeftSidebar from "./LeftSidebar";
 import Main from "./Main";
 import RightSidebar from "./RightSidebar";
 import { AppProvider } from "../context/AppProvider";
+import { UpgradesProvider } from "../context/UpdatesProvider";
 
 function App() {
   return (
     <AppProvider>
-      <div className="container" aria-live="polite">
-        <Header />
-        <LeftSidebar />
-        <Main />
-        <RightSidebar />
-      </div>
+      <UpgradesProvider>
+        <div className="container" aria-live="polite">
+          <Header />
+          <LeftSidebar />
+          <Main />
+          <RightSidebar />
+        </div>
+      </UpgradesProvider>
     </AppProvider>
   );
 }

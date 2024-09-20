@@ -44,3 +44,18 @@
   padding: 2% 0 2% 0;
   border-radius: 8px;
 }
+
+.switch-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .left-sidebar {
+    grid-column: 1 / 2;
+    border-right: none;
+  }
+  .left-sidebar.ldark {
+    border-right: none;
+  }
+}
