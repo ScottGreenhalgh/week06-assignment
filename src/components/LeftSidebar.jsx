@@ -73,7 +73,7 @@ export default function LeftSidebar() {
         handleToggle={() => setIsAudioEnabled(!isAudioEnabled)}
       />
       <img
-        src="./src/assets/cookie.webp"
+        src="/src/assets/cookie.webp"
         alt="big cookie"
         id="cookie-image"
         aria-label="Clickable big cookie image"
