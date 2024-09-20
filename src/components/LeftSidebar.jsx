@@ -14,7 +14,7 @@ export default function LeftSidebar() {
   function handleClick() {
     setCount(count + 1);
     clickAnimation();
-    playAudio("./src/assets/bigcookie.mp3");
+    playAudio("./bigcookie.mp3");
   }
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function LeftSidebar() {
         handleToggle={() => setIsAudioEnabled(!isAudioEnabled)}
       />
       <img
-        src="/src/assets/cookie.webp"
+        src="./cookie.webp"
         alt="big cookie"
         id="cookie-image"
         aria-label="Clickable big cookie image"

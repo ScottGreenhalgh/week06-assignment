@@ -18,7 +18,7 @@ export default async function fetchUpgrades() {
     try {
       // Adjust the path based on where your 'upgrades.json' is located.
       // If using Create React App or Vite, assets in the 'public' folder can be accessed via '/assets/upgrades.json'
-      const fallbackResponse = await fetch("./src/assets/upgrades.json");
+      const fallbackResponse = await fetch("./upgrades.json");
 
       if (!fallbackResponse.ok) {
         throw new Error(
